@@ -7,13 +7,14 @@ import java.util.Map;
 
 public class RMIServer implements KeyStoreInterface
 {
-	
+	private static final long serialVersionUID = -8501200304595115835L;
 	public RMIServer() {}
 	
 	// Declare a hashmap to store the key value pairs
     Map<Integer, String> keyValue = new HashMap<Integer, String>();
     static RMIServer instance = null;
     Utilities utilities;
+
     static 
     {
         if (instance == null)
@@ -103,21 +104,24 @@ public class RMIServer implements KeyStoreInterface
     }
 	
  public static void main(String args[]) {
+	
         
         try 
         {
-            RMIServer obj = new RMIServer();
+            final RMIServer obj = new RMIServer();
             KeyStoreInterface stub = (KeyStoreInterface) UnicastRemoteObject.exportObject(obj, 0);
 
             // Bind the remote object's stub in the registry
-            Registry registry = LocateRegistry.getRegistry();
+            Registry registry = LocateRegistry.getRegistry(Integer.parseInt(args[0]));
             registry.bind("KeyValueStore", stub);
             System.err.println("Server ready");
             
          // Create a new thread for each client
 		    Thread t =new Thread();
 		    t.start();
-            
+
+	
+           
         } 
         catch (Exception e) 
         {
